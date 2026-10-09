@@ -1,0 +1,42 @@
+{
+  "name": "personal-news-reader",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "node scripts/start.mjs",
+    "typecheck": "tsc --noEmit",
+    "setup": "node scripts/setup.mjs",
+    "import": "tsx scripts/import-pdfs.ts",
+    "backup": "tsx scripts/backup.ts",
+    "postinstall": "node scripts/copy-pdf-assets.mjs",
+    "test": "tsx --test tests/store.test.ts tests/personal.test.ts tests/request-origin.test.ts",
+    "import:news": "tsx scripts/import-news.ts",
+    "test:personal:e2e": "node tests/personal.e2e.cjs",
+    "test:e2e": "node tests/reader.e2e.cjs",
+    "test:period": "tsx --test tests/news-period.test.ts",
+    "test:period:e2e": "node tests/period.e2e.cjs"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,12 @@
+.period-picker { border: 1px solid var(--line); border-radius: 8px; padding: 18px; margin: 20px 0; background: #fffefa; }
+.period-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; }
+.period-presets strong { margin-right: 8px; }
+.period-presets button { padding: 10px 14px; border: 1px solid var(--line); border-radius: 6px; min-height: 42px; }
+.period-presets button[aria-pressed=true] { background: var(--green); border-color: var(--green); color: white; }
+.period-summary { margin: 14px 0 0; color: #667064; font-size: 12px; line-height: 1.9; }
+.period-custom { margin-top: 16px; }
+.period-custom fieldset { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; padding: 16px 0 0; margin: 0; border: 0; min-width: 0; }
+.period-custom legend { font-size: 13px; }
+.period-custom label { min-width: 140px; }
+.period-custom .form-error { margin: 14px 0 0; }
+@media(max-width:480px) { .period-picker { padding: 14px; } .period-presets { gap: 6px; } .period-presets strong { width: 100%; margin-bottom: 4px; } .period-presets button { padding: 10px 12px; } .period-custom label { width: 100%; min-width: 0; } .period-custom .primary { width: 100%; } }

@@ -1,0 +1,95 @@
+const { chromium, expect } = require('@playwright/test');
+const { spawn } = require('node:child_process');
+const { mkdirSync, mkdtempSync, writeFileSync, existsSync } = require('node:fs');
+const { randomBytes, scryptSync } = require('node:crypto');
+const { DatabaseSync } = require('node:sqlite');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const origin = 'http://127.0.0.1:3119';
+mkdirSync('test-results', { recursive: true });
+const dataDir = path.resolve(mkdtempSync('test-results/period-browser-'));
+const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date());
+const ago = n => new Date(Date.parse(today) - n * 86400000).toISOString().slice(0, 10);
+const news = [0, 6, 7, 29, 30].map((n, i) => ({ id: `period-${i}`, title: `时间测试新闻 ${i}`, summary: '用于验证日期筛选', topic: '科研', source: 'test', url: 'https://example.com', date: ago(n), importance: 3, evidence: { approved: true, note: '测试数据' }, publicAssessment: { reach: 4, severity: 4, urgency: 4, reason: '测试' } }));
+writeFileSync(path.join(dataDir, 'news-catalog.json'), JSON.stringify(news));
+const password = randomBytes(18).toString('hex'), salt = randomBytes(16).toString('hex');
+let server, browser, logs = '';
+(async () => {
+  server = spawn(process.execPath, ['scripts/start.mjs'], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, NEWS_DATA_DIR: dataDir, NEWS_USERNAME: 'period-reader', NEWS_PASSWORD_HASH: `${salt}:${scryptSync(password, salt, 64).toString('hex')}`, NEWS_ORIGIN: origin, NEWS_SECURE_COOKIE: 'false', HOSTNAME: '127.0.0.1', PORT: '3119' } });
+  server.stdout.on('data', d => logs += d); server.stderr.on('data', d => logs += d);
+  let ready = false;
+  for (let i = 0; i < 100; i++) { try { await fetch(origin + '/api/session'); ready = true; break; } catch {} await new Promise(r => setTimeout(r, 250)); }
+  assert.ok(ready, logs);
+  const chrome = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+  browser = await chromium.launch({ headless: true, ...(existsSync(chrome) ? { executablePath: chrome } : {}) });
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const login = await context.request.post(origin + '/api/login', { headers: { Origin: origin }, data: { username: 'period-reader', password } });
+  assert.equal(login.status(), 200);
+  // Prepare a calibrated test account and editions in an isolated database.
+  const db = new DatabaseSync(path.join(dataDir, 'news.sqlite'));
+  const topics = ['模型与编程','智能体','芯片与基础设施','科研','创作工具','公共治理','产业商业'];
+  const scores = Object.fromEntries(topics.map(t => [t, 0]));
+  const profile = { version: 1, description: '测试新闻', rules: { topics: scores, importance: scores, locks: [], sources: {}, weights: { relevance: 50, importance: 30, freshness: 20 } }, answers: news.map(n => ({ newsId: n.id, interest: null, importance: null })) };
+  db.prepare('INSERT INTO personal_profiles VALUES (?,?)').run('legacy-owner', JSON.stringify(profile));
+  for (const [i, n] of news.entries()) db.prepare('INSERT INTO editions VALUES (?,?,?,?,?,?)').run(`edition-${i}`, `测试报刊 ${i}`, n.date, `period-hash-${i}`, '[[0,0,595,842]]', new Date().toISOString());
+  db.close();
+  const page = await context.newPage(), errors = [];
+  page.on('pageerror', e => errors.push(e.message));
+  await page.goto(origin + '/personal');
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(5);
+  for (const [days, count] of [[1,1], [7,2], [30,4]]) {
+    await page.getByRole('button', { name: `过去 ${days} 天`, exact: true }).click();
+    await expect(page.locator('.pn-feed .pn-card')).toHaveCount(count);
+    await expect(page.locator('.pn-public .pn-card')).toHaveCount(count);
+  }
+  await page.getByRole('button', { name: '自定义', exact: true }).click();
+  await page.getByLabel('过去多少天').fill('8');
+  await page.getByRole('button', { name: '应用区间', exact: true }).click();
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(3);
+  await page.getByRole('button', { name: '自定义', exact: true }).click();
+  await page.getByLabel('自定义方式').selectOption('dates');
+  await page.getByLabel('开始日期', { exact: true }).fill(ago(2));
+  await page.getByLabel('结束日期', { exact: true }).fill(ago(3));
+  await page.getByRole('button', { name: '应用区间', exact: true }).click();
+  await expect(page.locator('.period-picker').getByRole('alert')).toContainText('开始日期不能晚于结束日期');
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(3);
+  await page.getByLabel('结束日期', { exact: true }).fill(ago(2));
+  await page.getByRole('button', { name: '应用区间', exact: true }).click();
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(0);
+  await expect(page.getByText('所选区间内没有符合个人规则的合格新闻', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: '过去 7 天', exact: true }).click();
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(2);
+  await page.locator('.pn-feed').getByRole('button', { name: '多看「科研」' }).first().click();
+  await expect(page.locator('.pn-status')).toContainText('反馈');
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(2);
+  await page.getByRole('button', { name: '刷新服务器规则' }).click();
+  await expect(page.locator('.pn-status')).toContainText('已读取最新规则');
+  await expect(page.locator('.pn-feed .pn-card')).toHaveCount(2);
+  const invalid = await context.request.get(origin + '/api/personal?start=invalid&end=invalid');
+  assert.equal(invalid.status(), 400);
+  await page.screenshot({ path: 'test-results/period-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: '自定义', exact: true }).click();
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await page.screenshot({ path: 'test-results/period-mobile.png', fullPage: true });
+  // Archive filtering uses the real editions endpoint; suppress document rendering for this list-only check.
+  await page.route('**/api/pdf/**', route => route.fulfill({ status: 404, body: 'fixture' }));
+  await page.goto(origin);
+  await page.getByRole('button', { name: '往期报刊', exact: true }).click();
+  await expect(page.locator('.edition-card')).toHaveCount(5);
+  for (const [days, count] of [[1,1], [7,2], [30,4]]) {
+    await page.getByRole('button', { name: `过去 ${days} 天`, exact: true }).click();
+    await expect(page.locator('.edition-card')).toHaveCount(count);
+  }
+  await page.getByRole('button', { name: '自定义', exact: true }).click();
+  await page.getByLabel('自定义方式').selectOption('dates');
+  await page.getByLabel('开始日期', { exact: true }).fill(ago(2));
+  await page.getByLabel('结束日期', { exact: true }).fill(ago(2));
+  await page.getByRole('button', { name: '应用区间', exact: true }).click();
+  await expect(page.getByText('这个区间还没有报刊')).toBeVisible();
+  await page.getByRole('button', { name: '查看全部报刊' }).click();
+  await expect(page.locator('.edition-card')).toHaveCount(5);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  assert.deepEqual(errors, []);
+  console.log('Passed: 1/7/30 days, custom days/dates, validation, empty results, public news, feedback/refresh retention, archive, desktop/mobile.');
+})().catch(error => { console.error(error); writeFileSync('test-results/period-server.log', logs); process.exitCode = 1; }).finally(async () => { await browser?.close(); if (server && !server.killed) { const stopped = new Promise(r => server.once('exit', r)); server.kill(); await stopped; } });

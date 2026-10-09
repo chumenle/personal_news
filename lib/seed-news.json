@@ -1,0 +1,260 @@
+[
+  {
+    "topic": "澳大利亚越权披露与白宫安全承诺",
+    "ratings": [
+      5,
+      5,
+      5,
+      4,
+      4
+    ],
+    "score": 95.0,
+    "evidence": "通过：公司说明、承诺原文；事故事实归因公司",
+    "placement": "头条",
+    "reason": "直接涉及公共系统、研发暂停和治理责任，影响超出单一产品。",
+    "source": "https://openai.com/index/how-we-will-do-better-for-australia/"
+  },
+  {
+    "topic": "AMD 拟收购 World Labs",
+    "ratings": [
+      5,
+      5,
+      5,
+      3,
+      4
+    ],
+    "score": 92.0,
+    "evidence": "通过：交易双方公告",
+    "placement": "头版次条",
+    "reason": "约82亿美元拟议交易将改变空间智能研究与硬件公司的关系；尚未交割。",
+    "source": "https://www.globenewswire.com/news-release/2026/09/28/3370256/0/en/amd-to-acquire-world-labs-to-advance-the-future-of-ai-compute.html"
+  },
+  {
+    "topic": "Sonnet 5.5 与 GPT-6.1 Sol",
+    "ratings": [
+      4,
+      4,
+      4,
+      5,
+      4
+    ],
+    "score": 83.0,
+    "evidence": "通过：双方发布原文；性能归因厂商",
+    "placement": "产品版主稿",
+    "reason": "影响日常开发的成本和能力；合并同类竞争，避免两条重复占位。",
+    "source": "https://www.anthropic.com/claude-sonnet-5-5"
+  },
+  {
+    "topic": "Dots 常驻智能体",
+    "ratings": [
+      4,
+      4,
+      4,
+      5,
+      4
+    ],
+    "score": 83.0,
+    "evidence": "通过：官方发布与权限说明",
+    "placement": "产品版次稿",
+    "reason": "产品开始围绕持续职责组织；真实长期效果仍待观察。",
+    "source": "https://openai.com/index/introducing-dots/"
+  },
+  {
+    "topic": "DeepSeek 昇腾推理组件",
+    "ratings": [
+      4,
+      4,
+      5,
+      4,
+      3
+    ],
+    "score": 82.0,
+    "evidence": "通过：官方代码仓库与技术文档",
+    "placement": "基础设施版主稿",
+    "reason": "公开实现对硬件适配和生态有持续意义；热度未作量化。",
+    "source": "https://github.com/deepseek-ai/FlashMLA/blob/main/docs/20260930-ascend-prefill-deep-dive.md"
+  },
+  {
+    "topic": "NVIDIA Open Agent Safety Platform",
+    "ratings": [
+      4,
+      4,
+      5,
+      4,
+      3
+    ],
+    "score": 82.0,
+    "evidence": "通过：官方产品公告",
+    "placement": "基础设施版并列主稿",
+    "reason": "从外部执行智能体边界，对长任务部署有意义；效果为厂商主张。",
+    "source": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Launches-Open-Agent-Safety-Platform-to-Secure-Agents-From-Testing-to-Deployment/default.aspx"
+  },
+  {
+    "topic": "Gemini 4 Argon 有限开放",
+    "ratings": [
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "score": 80.0,
+    "evidence": "通过：Google 发布原文",
+    "placement": "产品版短稿",
+    "reason": "主要厂商新一代模型，但仅有限开放，不能当作普遍可用工具。",
+    "source": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
+  },
+  {
+    "topic": "Jev 决策模型的两项评测",
+    "ratings": [
+      3,
+      4,
+      4,
+      5,
+      3
+    ],
+    "score": 75.0,
+    "evidence": "通过：两篇预印本；非成熟共识",
+    "placement": "技术版主稿",
+    "reason": "专门化路线有启发，证据仍是限定任务上的早期研究。",
+    "source": "https://arxiv.org/abs/2609.37647"
+  },
+  {
+    "topic": "ASD-STE100 输出理解讨论",
+    "ratings": [
+      3,
+      3,
+      4,
+      5,
+      3
+    ],
+    "score": 70.0,
+    "evidence": "限定通过：官方标准、交叉转载；X原帖不可读",
+    "placement": "社区版主稿",
+    "reason": "有开发者相关性与持久问题意识；不声称全网热度或实证提效。",
+    "source": "https://www.aiwithadele.com/guides/ai-simplified-technical-english"
+  },
+  {
+    "topic": "SynthID Bio",
+    "ratings": [
+      3,
+      4,
+      5,
+      2,
+      2
+    ],
+    "score": 68.0,
+    "evidence": "通过：研究方公告与项目",
+    "placement": "科学短稿",
+    "reason": "科学数据溯源有长期价值，日常开发相关性较低。",
+    "source": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/synthid-bio/"
+  },
+  {
+    "topic": "Comfy Agent",
+    "ratings": [
+      3,
+      4,
+      3,
+      4,
+      3
+    ],
+    "score": 68.0,
+    "evidence": "通过：官方公告",
+    "placement": "社区版次稿",
+    "reason": "可见可编辑的画布协作方式值得观察；当前仍测试。",
+    "source": "https://blog.comfy.org/p/comfy-agent-the-first-agent-for-craft"
+  },
+  {
+    "topic": "Rho-1",
+    "ratings": [
+      3,
+      4,
+      4,
+      3,
+      2
+    ],
+    "score": 67.0,
+    "evidence": "通过：开发方研究预览",
+    "placement": "技术版次稿",
+    "reason": "与Jev形成路线对照；概念验证不足以进入头版。",
+    "source": "https://reka.ai/news/rho-1-collapsing-the-multimodal-stack"
+  },
+  {
+    "topic": "Flux 图像模型更新",
+    "ratings": [
+      3,
+      3,
+      3,
+      4,
+      3
+    ],
+    "score": 63.0,
+    "evidence": "待复核：此前版本候选，本轮未重查",
+    "placement": "本期不选",
+    "reason": "边际信息较低；本期用Comfy和Rho覆盖视觉方向，未为凑数复用旧稿。",
+    "source": "https://docs.bfl.ai/release-notes"
+  },
+  {
+    "topic": "Cohere Embed 更新",
+    "ratings": [
+      3,
+      3,
+      4,
+      3,
+      2
+    ],
+    "score": 62.0,
+    "evidence": "待复核：此前版本候选，本轮未重查",
+    "placement": "本期不选",
+    "reason": "与已选技术稿相比受众较窄，证据也未在本轮重查。",
+    "source": "https://docs.cohere.com/changelog/embed-v5"
+  },
+  {
+    "topic": "AI 改称 SI 的行政令",
+    "ratings": [
+      3,
+      2,
+      2,
+      2,
+      4
+    ],
+    "score": 50.0,
+    "evidence": "通过：行政令原文",
+    "placement": "仅作域名短讯背景",
+    "reason": "命名变化不能替代能力或产业变化；与.si事件合并，避免重复。",
+    "source": "https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/"
+  },
+  {
+    "topic": ".si 域名注册潮",
+    "ratings": [
+      2,
+      2,
+      1,
+      2,
+      4
+    ],
+    "score": 40.0,
+    "evidence": "通过：注册局网站、行业媒体历史快照",
+    "placement": "末版短讯",
+    "reason": "热度较高，但注册不等于实际使用，持续性不足，不能竞争头条。",
+    "source": "https://domainnamewire.com/2026/09/28/slovenia-si-domains/"
+  },
+  {
+    "topic": "模型发布泄露与未经确认的时间表",
+    "ratings": null,
+    "score": null,
+    "evidence": "未过门槛：缺乏足够可核查证据",
+    "placement": "不选",
+    "reason": "不把传闻带入评分来制造确定性。",
+    "source": ""
+  },
+  {
+    "topic": "娱乐视频、榜单口水战与一次性促销",
+    "ratings": null,
+    "score": null,
+    "evidence": "不符合用户范围",
+    "placement": "不选",
+    "reason": "即使有声量，也未提供足够持久信息。",
+    "source": ""
+  }
+]

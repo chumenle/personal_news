@@ -1,0 +1,28 @@
+node_modules/
+.next/
+data/
+backups/
+.env*
+!.env.example
+.local-access.txt
+public/pdfjs/
+*.tsbuildinfo
+test-results/
+
+# Local research, generated editions, and private product feedback
+output/
+tmp/
+产品灵感日志.md
+
+# Runtime data and credentials, including alternate data directories
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+.DS_Store
+Thumbs.db
